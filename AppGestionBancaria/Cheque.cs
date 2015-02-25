@@ -25,7 +25,7 @@ namespace AppGestionBancaria
 
         #endregion
 
-         #region "Constructores"
+        #region "Constructores"
         public  Cheques()
             : base()
         {
@@ -69,6 +69,13 @@ namespace AppGestionBancaria
             return this.ToString().GetHashCode();
         }
         #endregion
+
+        #region "Metodos"
+        public void BalanceAtual(Saldo);
+        public void Depositar();
+        public void Retirar(BalanceActual - RetiroCheque);
+        #endregion
+
 
         //edwin
 
