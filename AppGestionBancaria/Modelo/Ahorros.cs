@@ -3,63 +3,61 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace AppGestionBancaria.Modelo
 {
     public class Ahorros :Cuentas
     {
 
-        #region "Atributos"
-        private double tasainteres;
-         #endregion
+       #region "Atributos"
+        private float tasaInteres;
+        private static int count = 0;
+        private static int numeroTransaciones = 3;
+        #endregion
 
         #region "Propiedades"
 
-        /// <summary>
-        /// Establece o retorna el valor de la identificación
-        /// </summary>
-        public double TasaInteres
+        public float Tasadeinteres
         {
-            get { return tasainteres; }
-            set { tasainteres = value; }
+            get { return tasaInteres; }
+            set { tasaInteres = value; }
         }
-        
         #endregion
 
-        #region "Constructores"
-        public Ahorros()
-            : base()
+        #region"Constructores"
+
+        ///<summary>
+        ///Contructor por defecto  de Cuenta de Ahorros
+        ///</summary>
+        ///
+        public Ahorros():base()
         {
-            
-            this.tasainteres = 1.2;
-            
+            this.tasaInteres = 0;
         }
 
-        public Ahorros(string id, string balance, string idcliente, double tasainteres)
-            : base(id,balance,idcliente)
+        public Ahorros(string cliente, string identificacion, string idcliente,double balance,float tasadeinteres)
+                    :base( cliente,  identificacion,  idcliente, balance)
         {
-            this.tasainteres = tasainteres;
-            
+            this.tasaInteres = tasadeinteres;
         }
-
 
         #endregion
 
-        #region "Métodos Sobre Escritos"
+        #region "Metodos Sobre Escritos"
+
         public override string ToString()
         {
             return base.ToString() +
-                   
-                   "\nTasaInteres: " + this.tasainteres;
+                   "\nTasa de Interes: " + this.tasaInteres;
         }
-
         public override bool Equals(object obj)
         {
             Ahorros o = (Ahorros)obj;
             bool result = false;
 
-            if (base.Equals(o) &&
-               (this.tasainteres == o.tasainteres))
+            if ((base.Equals(o)) &&
+               (this.tasaInteres == o.tasaInteres))
                 result = true;
 
             return result;
@@ -69,12 +67,61 @@ namespace AppGestionBancaria.Modelo
         {
             return this.ToString().GetHashCode();
         }
+
+
+        public override string depositar(double valor)
+        {
+            this.Balance+= valor;
+            return balanceActual(valor, 'D');
+        }
+        public override string retitar(double valor)
+        {
+            count++;
+            if (count > numeroTransaciones)
+                this.Balance = (this.Balance - (valor + this.tasaInteres));
+
+            else
+                this.Balance = this.Balance - valor;
+
+
+            return balanceActual(valor, 'R');
+        }
+
+        public override string balanceActual(double valor, char movimiento)
+        {
+            string result="";
+
+            switch (movimiento)
+            {
+                case 'R' : 
+                            result = "\n=======Movimiento Actual======"
+                            + "\nFecha: " + DateTime.Now.ToShortDateString()
+                            + "\nHora: " + DateTime.Now.ToShortTimeString()
+                            + "\nRetiro por Valor : " + valor 
+                            +"\nBalanca actual: " + this.Balance ;
+                            break;
+                case 'D':
+                            result = "\n=======Movimiento Actual======"
+                            + "\nFecha: " + DateTime.Now.ToShortDateString()
+                            + "\nHora: " + DateTime.Now.ToShortTimeString()
+                            + "\nDeposito por Valor : " + valor
+                            + "\nBalanca actual: " + this.Balance;
+                            break;
+                default: 
+                            result = "\n=======Movimiento Actual======"
+                            + "\nFecha: " + DateTime.Now.ToShortDateString()
+                            + "\nHora: " + DateTime.Now.ToShortTimeString()
+                            + "\nBalanca actual: " + this.Balance;
+                            break;
+
+            }
+
+
+            return result;
+        }
         #endregion
 
-        #region "Metodos"
-        public void BalanceAtual(Saldo);
-        public void Depositar(BalanceActual + deposito);
-        public void Retirar(BalanceActual - Retiro - tasaInteres);
-        #endregion
+
+            
     }
 }

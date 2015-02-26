@@ -8,113 +8,106 @@ namespace AppGestionBancaria.Modelo
 {
     public class Cuentas
     {
-        #region "Atributos"
-        private string ide;
-        private string balance;
-        private string idcliente;
+       #region "Atributos"
+        private string cliente;        
+        private string identificacion;        
+        private string idcliente;        
+        private double balance;
         #endregion
 
         #region "Propiedades"
-
-        /// <summary>
-        /// Establece o retorna el valor de la identificación
-        /// </summary>
-        public string identificacion
+        public string Cliente
         {
-            get { return ide; }
-            set { ide = value; }
-        }
-        /// <summary>
-        /// Establece o retorna el valor de la identificación
-        /// </summary>
-        public string Balance
-        {
-            get { return balance; }
-            set { balance = value; }
+            get { return cliente; }
+            set { cliente = value; }
         }
 
-        /// <summary>
-        /// Establece o retorna el valor de la identificación
-        /// </summary>
-        public string IDcliente
+        public string Identificacion
+        {
+            get { return identificacion; }
+            set { identificacion = value; }
+        }
+
+        public string Idcliente
         {
             get { return idcliente; }
             set { idcliente = value; }
         }
 
-
-
+        public double Balance
+        {
+            get { return balance; }
+            set { balance = value; }
+        }
         #endregion
 
         #region "Constructores"
-        ///<summary>
-        ///Contructor por defecto  de Personas
-        ///</summary>
         public Cuentas()
         {
-            this.ide = "1047424720";
-            this.balance = "150234";
-            this.idcliente = "00001";
+            ///<summary>
+            ///Contructor de Cuentas
+            ///</summary>
+            this.cliente = "Nombre del Cliente";
+            this.identificacion = "Num. de Cuenta";
+            this.idcliente = "Num. Cedula";
+            this.balance = 0.0;
         }
-
         ///<summary>
-        ///Contructor de inicialización Personas
+        ///Contructor de inicialización Cuentas
         ///</summary>
-        ///<param name="ide"> Identificacion de  la Personas</param>
-        ///<param name="balance"> Nombres y Apaellidos de Persona</param>
-        /// ///<param name="idcliente"> Nombres y Apaellidos de Persona</param>
+        ///<param name="nombre">Nombre del Cliente</param>
+        ///<param name="cliente">Numero de cuenta del Cliente</param>
+        ///<param name="id">Numero de cedula del Cliente</param>
+        ///<param name="monto">Balance actual del Cliente  </param>
         ///
-        public Cuentas(string ide, string balance, string idcliente)
+        public Cuentas(string cliente, string identificacion, string idcliente, double balance)
         {
-            this.ide = ide;
-            this.balance = balance;
+            this.cliente = cliente;
+            this.identificacion = identificacion;
             this.idcliente = idcliente;
+            this.balance = balance;
         }
         #endregion
 
-        #region "Métodos Sobre Escritos"
-        /// <summary>
-        /// Retorna el valor del objeto representado en una cadena
-        /// </summary>
+        #region "Metodos Sobre Escritos"
         public override string ToString()
         {
-            return "\n=============================================\n" +
-                     "Identificación:  " + this.ide + "\n" +
-                     "Balance:  " + this.balance + "\n" +
-                     "IdCliente:  " + this.idcliente;
+            return  "Nombre de la Clase" +
+                "\n=============================================" +
+                     "\nNombre:  " + this.cliente  +
+                     "\nNum Cuenta:  " + this.identificacion  +
+                     "\nIdentificacion Cliente: " + this.idcliente  +
+                     "\nBalance Actual: " + this.balance;
         }
 
-        /// <summary>
-        /// Método que compara dos objectos
-        /// </summary>
         public override bool Equals(object obj)
         {
             Cuentas o = (Cuentas)obj;
             bool result = false;
 
-            if (base.Equals(o) &&
-                (this.ide == o.ide) &&
-                 (this.balance == o.balance) &&
-                 (this.idcliente == o.idcliente))
+            if ((this.cliente == o.cliente) &&
+                (this.identificacion == o.identificacion) &&
+                (this.idcliente == o.idcliente) &&
+                (this.balance == o.balance))
+
                 result = true;
 
             return result;
         }
 
-        /// <summary>
-        /// Devuelve la identificación del objecto
-        /// </summary>
         public override int GetHashCode()
         {
             return this.ToString().GetHashCode();
         }
         #endregion
 
-        #region "Metodos"
-        public void BalanceAtual(Saldo);
-        public void Depositar
-            (BalanceActual + deposito);
-        public void Retirar(BalanceActual - Retiro);
-        #endregion
+        public abstract string depositar(double valor);
+
+        public abstract string retitar(double valor);
+
+        public abstract string balanceActual(double valor, char movimiento);
+      
+
+       
     }
 }

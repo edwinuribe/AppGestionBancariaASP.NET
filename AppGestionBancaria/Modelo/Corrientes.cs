@@ -8,71 +8,50 @@ namespace AppGestionBancaria.Modelo
 {
     public class Corrientes :Cuentas
     {
-        #region "Atributos"
-        private double limitecredito;
-        private double tiefectivo;
-        private double tibalance;
+         #region "Atributos"
+        private float limitesCreditos;
+        private float tasaInteres;
+        private static int count = 0;
+        private static int numeroTransaciones = 3;
         #endregion
 
         #region "Propiedades"
-
-        /// <summary>
-        /// Establece o retorna el valor de la identificación
-        /// </summary>
-        public double limitedecredito
+        public float LimitesCreditos
         {
-            get { return limitecredito; }
-            set { limitecredito = value; }
+            get { return limitesCreditos; }
+            set { limitesCreditos = value; }
         }
-
-        /// <summary>
-        /// Establece o retorna el valor de la identificación
-        /// </summary>
-        public double TasaInteresEfectivo
+        public float TasaInteres
         {
-            get { return tiefectivo; }
-            set { tiefectivo = value; }
+            get { return tasaInteres; }
+            set { tasaInteres = value; }
         }
-
-        /// <summary>
-        /// Establece o retorna el valor de la identificación
-        /// </summary>
-        public double TasaInteresBalance
-        {
-            get { return tibalance; }
-            set { tibalance = value; }
-        }
-
         #endregion
 
-        #region "Constructores"
-        public  Corrientes()
+        #region "Costructores"
+        ///<summary>
+        ///Contructor de Cuenta Corriente
+        ///</summary>
+        public Corrientes()
             : base()
         {
-            this.limitecredito = 300000;
-            this.tiefectivo = 1.2;
-            this.tibalance = 1.0;
-            
+            this.limitesCreditos = 0;
+            this.tasaInteres = 0;
         }
-
-        public Corrientes(string id, string balance, string idcliente, double limitecredito, double tiefectivo, double tibalance)
-            : base(id,balance,idcliente)
+        public Corrientes(string cliente, string identificacion, string idcliente, double balance, float limitesDeCreditos, float tasadeinteres)
+            : base(cliente, identificacion, idcliente, balance)
         {
-            this.limitecredito = limitecredito;
-            this.tiefectivo = tiefectivo;
-            this.tibalance = tibalance;
-            
+            this.limitesCreditos = limitesDeCreditos;
+            this.tasaInteres = tasadeinteres;
         }
         #endregion
 
-        #region "Métodos Sobre Escritos"
+        #region "Metodos Sobre Escritos"
         public override string ToString()
         {
             return base.ToString() +
-                   "\nLimite de credito: " + this.limitecredito +
-                   "\nTasa interes efectivo: " + this.tiefectivo +
-                   "\nTasa interes blance: " + this.tibalance;
-                   
+                     "\nLimite de Creditos:  " + this.limitesCreditos + "\n" +
+                     "\nTasa de Interes:  " + this.tasaInteres;
         }
 
         public override bool Equals(object obj)
@@ -80,10 +59,10 @@ namespace AppGestionBancaria.Modelo
             Corrientes o = (Corrientes)obj;
             bool result = false;
 
-            if (base.Equals(o) &&
-               (this.limitecredito == o.limitecredito) &&
-                (this.tiefectivo == o.tiefectivo) &&
-                 (this.tibalance == o.tibalance))
+            if ((base.Equals(o)) &&
+                (this.limitesCreditos == o.limitesCreditos) &&
+                (this.tasaInteres == o.tasaInteres))
+
                 result = true;
 
             return result;
@@ -93,12 +72,60 @@ namespace AppGestionBancaria.Modelo
         {
             return this.ToString().GetHashCode();
         }
+
+        public override string depositar(double valor)
+        {
+            this.Balance += valor;
+            return balanceActual(valor, 'D');
+        }
+        public override string retitar(double valor)
+        {
+            count++;
+            if ((count > numeroTransaciones) && (valor < this.limitesCreditos))
+                this.Balance = (this.Balance - (valor + this.tasaInteres));
+
+            else
+                this.Balance = this.Balance - valor;
+
+
+            return balanceActual(valor, 'R');
+        }
+
+        public override string balanceActual(double valor, char movimiento)
+        {
+            string result = "";
+
+            switch (movimiento)
+            {
+                case 'R':
+                    result = "\n=======Movimiento Actual======"
+                    + "\nFecha: " + DateTime.Now.ToShortDateString()
+                    + "\nHora: " + DateTime.Now.ToShortTimeString()
+                    + "\nRetiro por Valor : " + valor
+                    + "\nBalanca actual: " + this.Balance;
+                    break;
+                case 'D':
+                    result = "\n=======Movimiento Actual======"
+                    + "\nFecha: " + DateTime.Now.ToShortDateString()
+                    + "\nHora: " + DateTime.Now.ToShortTimeString()
+                    + "\nDeposito por Valor : " + valor
+                    + "\nBalanca actual: " + this.Balance;
+                    break;
+                default:
+                    result = "\n=======Movimiento Actual======"
+                    + "\nFecha: " + DateTime.Now.ToShortDateString()
+                    + "\nHora: " + DateTime.Now.ToShortTimeString()
+                    + "\nBalanca actual: " + this.Balance;
+                    break;
+
+            }
+
+
+            return result;
+        }
+
         #endregion
 
-        #region "Metodos"
-        public void BalanceAtual(Saldo);
-        public void Depositar(BalanceActual + deposito);
-        public void Retirar(BalanceActual - Retiro - tasaInteres);
-        #endregion
+        
     }
 }
